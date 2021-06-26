@@ -17,6 +17,31 @@ var (
 	cfg        *config.Config
 )
 
+type windData struct {
+	Speed   float64 `json:"speed"`
+	Bearing float64 `json:"bearing"`
+}
+
+type dailyData struct {
+	Date        string `json:"date"`
+	WeatherType string `json:"type"`
+	Description string `json:"description"`
+	Temp        struct {
+		Low  float64 `json:"low"`
+		High float64 `json:"high"`
+	} `json:"temperature"`
+}
+
+type weatherData struct {
+	Date        string       `json:"date"`
+	WeatherType string       `json:"type"`
+	Description string       `json:"description"`
+	Temp        float64      `json:"temperature"`
+	Wind        *windData    `json:"wind"`
+	PrecipProb  float64      `json:"precip_prob"`
+	Daily       []*dailyData `json:"daily"`
+}
+
 func main() {
 	flag.Parse()
 
