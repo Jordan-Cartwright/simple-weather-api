@@ -46,3 +46,15 @@ jobs:
     script:
       - sudo bash ./.ci/enable-experimental.sh
       - sudo bash ./.ci/manifest.sh --image ${DOCKER_IMAGE} --manifest ${VERSION} --latest --push
+
+  - stage: Deploy
+    if: branch = main AND type != pull_request
+    script:
+      - "echo Starting deployment to Heroku"
+      - curl https://cli-assets.heroku.com/install.sh | sh
+      - heroku version
+      - docker pull  ${DOCKER_NAMESPACE}/${DOCKER_IMAGE}:${VERSION}
+      - docker tag ${DOCKER_NAMESPACE}/${DOCKER_IMAGE}:${VERSION} registry.heroku.com/${HEROKU_APP_NAME}/web
+      - heroku container:login
+      - docker push registry.heroku.com/${HEROKU_APP_NAME}/web
+      - heroku container:release web --app=${HEROKU_APP_NAME}
