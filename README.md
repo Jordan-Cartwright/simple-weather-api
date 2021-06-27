@@ -63,7 +63,7 @@ $ curl localhost:8080/api/v1/ping
 We can use the deployment manifests in the `deployment` folder to start the demo application on a Kubernetes cluster.
 
 Steps:
-- create a generic secret containing your OpenWeatherMap API key
+- Create a generic secret containing your OpenWeatherMap API key
 ```
 kubectl create secret generic weather-api --from-literal=apikey=myapikey
 ```
@@ -71,7 +71,7 @@ kubectl create secret generic weather-api --from-literal=apikey=myapikey
 ```
 kubectl apply -f deployment/
 ```
-- verify the deployment is working
+- Verify the deployment is working
 ```
 $ curl $CLUSTER-IP:30100/api/v1/ping
 {"message": "pong"}
