@@ -3,6 +3,10 @@
 
 This is a simple Golang weather API service that can be run in a container environment. This demo application allows users to look up weather by location, using latitude and longitude coordinates.
 
+To check out a fully deployed version of the API use these links:
+  - `[/api/v1/ping](https://simple-weather-api-demo.herokuapp.com/api/v1/ping)`
+  - `[/api/v1/weather](https://simple-weather-api-demo.herokuapp.com/api/v1/weather?latitude=33.7984&longitude=-84.3883)`
+
 ## Prerequisites and Considerations
 - Obtain an API key from OpenWeatherMap by signing up [here](https://openweathermap.org/appid).
 - The Kubernetes deployment directions assume the default cluster namespace.
