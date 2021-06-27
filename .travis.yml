@@ -1,0 +1,48 @@
+language: bash
+dist: focal
+sudo: required
+services:
+  - docker
+
+env:
+  global:
+    - GIT_BRANCH=$TRAVIS_BRANCH
+    - IS_PULL_REQUEST=$TRAVIS_PULL_REQUEST
+    - RELEASE_BRANCH=main
+    - DOCKER_NAMESPACE=jordancartwright
+    - DOCKER_IMAGE=simple-weather-api
+    - SUPPORTED_ARCHITECTURES="amd64 arm64"
+    - VERSION=$(git log -1 --pretty=%h)
+
+jobs:
+  include:
+  - stage: Test
+    arch: s390x
+    script:
+      - go test -v -cover
+  - stage: Build
+    if: branch = main AND type != pull_request
+    os: linux
+    arch: amd64
+    script:
+      - './.ci/build.sh --image ${DOCKER_IMAGE}:${VERSION} --push'
+  - if: branch = main AND type != pull_request
+    os: linux
+    arch: arm64
+    script:
+      - './.ci/build.sh --image ${DOCKER_IMAGE}:${VERSION} --push'
+
+  - stage: Tag
+    if: branch = main AND type != pull_request
+    os: linux
+    arch: s390x
+    script:
+      - './.ci/tag-image.sh --image ${DOCKER_IMAGE}:${VERSION} --tags "latest"'
+
+  - stage: Manifest
+    if: branch = main AND type != pull_request
+    os: linux
+    arch: s390x
+    script:
+      - sudo bash ./.ci/enable-experimental.sh
+      - sudo bash ./.ci/manifest.sh --image ${DOCKER_IMAGE} --manifest ${VERSION} --latest --push
