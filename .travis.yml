@@ -1,4 +1,4 @@
-language: go
+language: bash
 dist: focal
 sudo: required
 services:
@@ -19,7 +19,7 @@ jobs:
   - stage: Test
     arch: s390x
     script:
-      - go test -v -cover
+      - "docker run -v$TRAVIS_BUILD_DIR:/go/src -w /go/src golang:1.16 make test"
   - stage: Build
     if: branch = main AND type != pull_request
     os: linux
