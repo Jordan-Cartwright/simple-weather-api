@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: simple-weather
+  name: simple-weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-weather
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: simple-weather
+    spec:
+      containers:
+      - image: jordancartwright/simple-weather-api:latest
+        name: simple-weather-api
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APIKEY
+          valueFrom:
+            secretKeyRef:
+              name: weather-api
+              key: apikey
+        readinessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 8080
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
