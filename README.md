@@ -5,6 +5,8 @@ This is a simple Golang weather API service that can be run in a container envir
 
 ## Prerequisites and Considerations
 - Obtain an API key from OpenWeatherMap by signing up [here](https://openweathermap.org/appid).
+- The Kubernetes deployment directions assume the default cluster namespace.
+- The deployment will expose a service for the weather api on a NodePort.
 
 ## CI/CD Setup
 This demo application makes use of TravisCI build stages to accomplish the following:
@@ -54,6 +56,22 @@ $ curl localhost:8080/api/v1/ping
 ```
 
 ### Deploy to Kubernetes
+We can use the deployment manifests in the `deployment` folder to start the demo application on a Kubernetes cluster.
+
+Steps:
+- create a generic secret containing your OpenWeatherMap API key
+```
+kubectl create secret generic weather-api --from-literal=apikey=myapikey
+```
+- Apply the deployment manifests
+```
+kubectl apply -f deployment/
+```
+- verify the deployment is working
+```
+$ curl $CLUSTER-IP:30100/api/v1/ping
+{"message": "pong"}
+```
 
 ## Example API Output
 `/api/v1/weather?latitude&longitude` is the expected input for a location (e.g., `/api/v1/weather?latitude=33.7984&longitude=-84.3883`).
