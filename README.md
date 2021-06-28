@@ -19,8 +19,9 @@ This demo application makes use of TravisCI build stages to accomplish the follo
   - Run our tests
 - On commits to `main`
   - Build our simple-weather-api docker image
-  - Tag the images and push thea architecture specific images
+  - Tag the images and push the architecture specific images
   - Create Docker manifests so users are able to run the image on multiple architectures effortlessly
+  - Deploy the new Docker image a Heroku
 
 This setup allows us to run our CI/CD pipeline in parallel, when applicable, and publish multi-architecture images. This therefore makes the demo application available to run in a variety of infrastructures.
 
